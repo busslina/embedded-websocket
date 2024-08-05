@@ -45,7 +45,7 @@ impl Encoder<&[u8]> for MyCodec {
 #[tokio::main]
 async fn main() -> Result<(), FramerError<impl Error>> {
     // Connect to a peer
-    let address = "127.0.0.1:1337";
+    let address = "127.0.0.1:40111";
     let mut buffer = [0u8; 4000];
     let stream = TcpStream::connect(address).await.map_err(FramerError::Io)?;
     let codec = MyCodec::new();
@@ -54,9 +54,9 @@ async fn main() -> Result<(), FramerError<impl Error>> {
 
     // initiate a websocket opening handshake
     let websocket_options = WebSocketOptions {
-        path: "/chat",
+        path: "/ws",
         host: "localhost",
-        origin: "http://localhost:1337",
+        origin: "http://localhost:40111",
         sub_protocols: None,
         additional_headers: None,
     };
