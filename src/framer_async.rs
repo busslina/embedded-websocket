@@ -54,6 +54,8 @@ impl<TRng> Framer<TRng, crate::Client>
 where
     TRng: RngCore,
 {
+    /// Handles the WebSocket handshake, sending the initial request, and processing the server's response.
+    /// It attempts to connect using the provided stream, buffer, and WebSocket options, and returns a subprotocol if successful.
     pub async fn connect<'a, B, E>(
         &mut self,
         stream: &mut (impl Stream<Item = Result<B, E>> + Sink<&'a [u8], Error = E> + Unpin),
@@ -81,7 +83,7 @@ where
                     match self.websocket.client_accept(&web_socket_key, buf) {
                         Ok((len, sub_protocol)) => {
                             // "consume" the HTTP header that we have read from the stream
-                            // read_cursor would be 0 if we exactly read the HTTP header from the stream and nothing else
+                            // remaining_len would be 0 if we exactly read the HTTP header from the stream and nothing else
 
                             // copy the remaining bytes to the end of the rx_buf (which is also the end of the buffer) because they are the contents of the next websocket frame(s)
                             let from = len;
